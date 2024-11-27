@@ -1,0 +1,13 @@
+{
+    "envs": {
+        "SHELL": "bash"
+    },
+    "filesystem" : {
+        "test": {
+            "aa": {
+                "file.txt": "dasddasddasd"
+            }
+        }
+    }
+}
+

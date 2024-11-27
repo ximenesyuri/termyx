@@ -1,0 +1,81 @@
+body {
+    background-color: #0c0c0c; /* Slightly off-black for less strain */
+    color: #bfbfbf;           /* Light gray text for better readability */
+    font-family: "Courier New", Courier, monospace;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling the body */
+}
+
+.terminal {
+    padding: 15px;
+    height: 90vh;          /* Make full use of the viewport height */
+    overflow-y: auto;      /* Allow scrolling if terminal content is long */
+    box-sizing: border-box;
+    white-space: pre-wrap; /* Preserve formatting for commands and output */
+}
+
+h1 {
+    color: #00ff00; /* Green like success messages in terminals */
+}
+
+a {
+    color: #57f7ff;       /* Cyan for standout links */
+    text-decoration: none; /* Remove default underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover for interactivity */
+}
+
+ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+}
+
+li {
+    padding: 5px 0;
+    color: #c0c0c0;   /* Ensure list items have consistent coloring */
+}
+
+.prompt  {
+    color: #d9d9d9;      /* Distinct prompt color for good contrast */
+    display: inline;     /* Keeping prompt text inline */
+    line-height: 25px;
+    visibility: visible;
+}
+
+.input-line {
+    color: red;      /* Distinct prompt color for good contrast */
+    display: inline;     /* Keeping prompt text inline */
+    line-height: 25px;
+    visibility: visible;
+}
+
+.dir {
+    color: #00ff00; /* Green color for directories, typical of terminals */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover for interactivity */
+}
+
+.cursor {
+    height: 17.5px;
+    background-color: #d9d9d9;
+    animation: blink 1s steps(1) infinite;
+    display: inline-block; /* Ensures cursor is visible even at line breaks */
+    width: 8px;
+}
+
+@keyframes blink {
+    50% { background-color: transparent; }
+}
+
+.output {
+    color: #eee; /* Subtle color for command outputs */
+}
+
+.error {
+    color: #ff6666; /* Light red for errors, like command not found */
+}
