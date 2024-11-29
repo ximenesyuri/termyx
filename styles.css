@@ -1,70 +1,70 @@
 body {
-    background-color: #0c0c0c; /* Slightly off-black for less strain */
-    color: #bfbfbf;           /* Light gray text for better readability */
+    background-color: #0c0c0c;
+    color: #bfbfbf;
     font-family: "Courier New", Courier, monospace;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Prevent scrolling the body */
+    overflow: hidden;
 }
 
 .terminal {
     padding: 15px;
-    height: 90vh;          /* Make full use of the viewport height */
-    overflow-y: auto;      /* Allow scrolling if terminal content is long */
+    height: 90vh;
+    overflow-y: auto;
     box-sizing: border-box;
-    white-space: pre-wrap; /* Preserve formatting for commands and output */
+    white-space: pre-wrap;
 }
 
 h1 {
-    color: #00ff00; /* Green like success messages in terminals */
+    color: #00ff00;
 }
 
 a {
-    color: #57f7ff;       /* Cyan for standout links */
-    text-decoration: none; /* Remove default underline */
+    color: #57f7ff;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline; /* Underline on hover for interactivity */
+    text-decoration: underline;
 }
 
 ul {
-    list-style: none; /* Remove bullet points */
+    list-style: none;
     padding: 0;
 }
 
 li {
     padding: 5px 0;
-    color: #c0c0c0;   /* Ensure list items have consistent coloring */
+    color: #c0c0c0;
 }
 
 .prompt  {
-    color: #d9d9d9;      /* Distinct prompt color for good contrast */
-    display: inline;     /* Keeping prompt text inline */
+    color: #d9d9d9;
+    display: inline;
     line-height: 25px;
     visibility: visible;
 }
 
 .input-line {
-    color: red;      /* Distinct prompt color for good contrast */
-    display: inline;     /* Keeping prompt text inline */
+    color: #d9d9d9;
+    display: inline;
     line-height: 25px;
     visibility: visible;
 }
 
 .dir {
-    color: #00ff00; /* Green color for directories, typical of terminals */
+    color: #00ff00;
 }
 
 a:hover {
-    text-decoration: underline; /* Underline on hover for interactivity */
+    text-decoration: underline;
 }
 
 .cursor {
     height: 17.5px;
     background-color: #d9d9d9;
     animation: blink 1s steps(1) infinite;
-    display: inline-block; /* Ensures cursor is visible even at line breaks */
+    display: inline-block;
     width: 8px;
 }
 
@@ -73,9 +73,9 @@ a:hover {
 }
 
 .output {
-    color: #eee; /* Subtle color for command outputs */
+    color: #eee;
 }
 
 .error {
-    color: #ff6666; /* Light red for errors, like command not found */
+    color: #ff6666;
 }
