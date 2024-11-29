@@ -1,0 +1,12 @@
+{
+    "background": "002b36",
+    "foreground": "839496",
+    "directories": "268bd2",
+    "files": "839496",
+    "intro": "586e75",
+    "prompt": "b58900",
+    "input": "839496",
+    "cursor": "93a1a1",
+    "output": "839496",
+    "error": "dc322f"
+}

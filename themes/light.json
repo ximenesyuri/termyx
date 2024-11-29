@@ -1,0 +1,12 @@
+{
+    "background": "ffffff",
+    "foreground": "333333",
+    "directories": "0000ff",
+    "files": "333333",
+    "intro": "666666",
+    "prompt": "ff6600",
+    "input": "333333",
+    "cursor": "222222",
+    "output": "333333",
+    "error": "ff0000"
+}

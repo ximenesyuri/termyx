@@ -1,4 +1,4 @@
-import { displayIntro } from './intro.js';
+import { defaultIntroText } from './intro.js';
 import { scrollToBottom, navigateTo, isValidPath } from './utils.js';
 import { initializeHistory } from './history.js';
 import { availableCommands } from './cmds.js';
@@ -11,9 +11,17 @@ export function initTerminal(terminal, startPath, fileSystem, terminalState) {
 
     terminalState.currentPath = isValidPath(startPath, fileSystem) ? startPath : '/';
     terminal.innerHTML = '';
-    displayIntro(terminal);
+    const introText = terminalState.introText || defaultIntroText();
+    displayIntro(terminal, introText);
     initializeHistory(terminalState);
     addNewPromptLine(terminal, terminalState);
+}
+
+function displayIntro(terminal, introText) {
+    const introElement = document.createElement('pre');
+    introElement.className = 'intro-text';
+    introElement.innerHTML = introText;
+    terminal.appendChild(introElement);
 }
 
 function createInputLine(promptText) {
@@ -24,12 +32,13 @@ function createInputLine(promptText) {
 }
 
 function getPromptString(terminalState) {
-    if (!terminalState || !terminalState.currentPath) {
-        console.error("Error: terminalState or currentPath is undefined.");
-        return "yx@dev$ ";
+    if (!terminalState || !terminalState.currentPath || !terminalState.promptText) {
+        console.error("Error: terminalState, currentPath or promptText is undefined.");
+        return "termyx$ ";
     }
     const path = terminalState.currentPath;
-    return `yx@dev/${path === '' ? path : path + '/'}$ `;
+    const prompt = terminalState.promptText;
+    return `${prompt}/${path === '' ? path : path + '/'}$ `;
 }
 
 export function addNewPromptLine(terminal, terminalState) {
@@ -70,33 +79,27 @@ export function processInput(terminal, terminalState, fileSystem) {
     const commandHistory = terminalState.commandHistory;
     console.log(`Processing input: ${inputBuffer}`);
 
-    // Add input to history if it's not empty
     if (inputBuffer.trim()) {
         commandHistory.push(inputBuffer);
         terminalState.historyIndex = commandHistory.length;
     }
 
-    // Split input into command and arguments
     const [cmd, ...args] = inputBuffer.trim().split(/\s+/);
     
     let output;
     if (availableCommands[cmd]) {
         try {
-            // Execute command with args array
             output = availableCommands[cmd](args, terminalState, fileSystem);
         } catch (error) {
-            // Handle any errors that occur during command execution
             console.error(`Error executing command [${cmd}]:`, error);
             output = `Error executing command: ${error.message}`;
         }
     } else {
-        // Inform user if command is not found
         output = `${cmd}: command not found`;
     }
 
-    // Output result to terminal and prepare for the next command
     appendOutput(output, terminal);
     addNewPromptLine(terminal, terminalState);
-    terminalState.inputBuffer = '';  // Clear buffer for next input
+    terminalState.inputBuffer = '';
 }
 

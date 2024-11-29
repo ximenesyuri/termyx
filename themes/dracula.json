@@ -1,0 +1,12 @@
+{
+    "background": "282a36",
+    "foreground": "f8f8f2",
+    "directories": "50fa7b",
+    "files": "f8f8f2",
+    "intro": "6272a4",
+    "prompt": "ff79c6",
+    "input": "f8f8f2",
+    "cursor": "f8f8f2",
+    "output": "f8f8f2",
+    "error": "ff5555"
+}

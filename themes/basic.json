@@ -1,0 +1,13 @@
+{
+  "background": "0c0c0c",
+  "foreground": "bfbfbf",
+  "directories": "00ff00",
+  "files": "bfbfbf",
+  "intro": "bfbfbf",
+  "prompt": "bfbfbf",
+  "input": "bfbfbf",
+  "cursor": "bfbfbf",
+  "output": "bfbfbf",
+  "error": "ff6666"
+}
+

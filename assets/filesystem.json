@@ -1,0 +1,80 @@
+{
+    "envs": {
+        "SHELL": "/bin/bash",
+        "USER": "yourusername",
+        "HOME": "/home/yourusername",
+        "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG": "en_US.UTF-8"
+    },
+    "filesystem": {
+        "bin": {
+            "bash": "Binary for Bash Shell",
+            "ls": "Binary for the ls command",
+            "echo": "Binary for the echo command",
+            "cat": "Binary for the cat command",
+            "mv": "Binary for the mv command",
+            "rm": "Binary for the rm command",
+            "cp": "Binary for the cp command",
+            "printf": "Binary for the printf command",
+            "exit": "Binary for the exit command",
+            "ps": "Binary for the ps command",
+            "pwd": "Binary for the pwd command",
+            "touch": "Binary for the touch command",
+            "mkdir": "Binary for the mkdir command",
+            "rmdir": "Binary for the rmdir command",
+            "grep": "Binary for the grep command",
+            "find": "Binary for the find command",
+            "chmod": "Binary for the chmod command",
+            "chown": "Binary for the chown command",
+            "head": "Binary for the head command",
+            "tail": "Binary for the tail command",
+            "diff": "Binary for the diff command",
+            "kill": "Binary for the kill command"
+        },
+        "etc": {
+            "passwd": "username:password:UID:GID:full name:home directory:shell",
+            "hosts": "127.0.0.1 localhost"
+        },
+        "home": {
+            "yourusername": {
+                "documents": {
+                    "example.txt": "This is an example document."
+                },
+                ".bashrc": "Configuration file for bash",
+                ".profile": "User profile script"
+            }
+        },
+        "lib": {
+            "libc.so.6": "C standard library shared object"
+        },
+        "sbin": {
+            "init": "Binary for the init process"
+        },
+        "usr": {
+            "bin": {
+                "python3": "Binary for Python 3 interpreter"
+            },
+            "lib": {
+                "libcrypt.so": "Cryptography library"
+            },
+            "local": {
+                "bin": {},
+                "lib": {}
+            },
+            "share": {
+                "man": {
+                    "man1": {
+                        "ls.1": "Man page for ls command"
+                    }
+                }
+            }
+        },
+        "var": {
+            "log": {
+                "syslog": "System log",
+                "auth.log": "Authentication log"
+            }
+        },
+        "tmp": {}
+    }
+}

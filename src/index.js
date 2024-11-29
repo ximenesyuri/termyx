@@ -1,5 +1,6 @@
 import { initTerminal } from './core/term.js';
 import { keysHandler } from './core/keys.js';
+import { defaultIntroText } from './core/intro.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeTerminal();
@@ -11,13 +12,14 @@ async function initializeTerminal() {
         console.error("Terminal element not found!");
         return;
     }
-    
-    // Focus the terminal to capture keyboard inputs directly
-    terminalElement.tabIndex = 0;  // Make div focusable if it's not inherently so
+
+    terminalElement.tabIndex = 0;
     terminalElement.focus();
 
     const filesystemPath = terminalElement.getAttribute('data-filesystem-path');
     const startPath = terminalElement.getAttribute('data-start-path') || '/';
+    const introTextFromElement = terminalElement.getAttribute('data-intro-text');
+    const promptText = terminalElement.getAttribute('data-prompt') || 'termyx$ ';
 
     if (!filesystemPath) {
         console.error('Filesystem path must be defined.');
@@ -30,13 +32,18 @@ async function initializeTerminal() {
             throw new Error('Failed to load filesystem configuration.');
         }
         const fileConfig = await response.json();
-        const { filesystem } = fileConfig;
+        const { filesystem, envs = {} } = fileConfig;
+
+        const introText = introTextFromElement || defaultIntroText();
 
         const terminalState = {
             currentPath: startPath,
             commandHistory: [],
             inputBuffer: '',
-            historyIndex: 0
+            historyIndex: 0,
+            envs,
+            introText,
+            promptText
         };
 
         window.addEventListener('keydown', (event) => {

@@ -1,0 +1,26 @@
+{
+  "name": "termyx",
+  "version": "0.0.0",
+  "description": "A UNIX-based terminal in pure js",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "start": "http-server dist"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "http-server": "^14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ximenesyuri/termyx"
+  },
+  "keywords": [
+    "unix",
+    "terminal",
+    "linux",
+    "commands"
+  ],
+  "author": "Yuri Ximenes Martins",
+  "license": "ISC"
+}
