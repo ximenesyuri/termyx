@@ -2,10 +2,12 @@
 
 # Dependencies
 
+None dependencies post build.  For build, just:
+
 - `node`
 - `npm` 
     - `dotenv`
-    - `http-server`
+ 
 
 # Install
 
