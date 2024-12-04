@@ -66,11 +66,12 @@ They appear in two contexts:
 
 You can set a `filesystem` directory and a `env` file which will be used in the build process to automatically generate the `fs.json`:
 
+```
 env                     meaning                            
 -----------------------------------------------------------------------------------
 TERMYX_FS_DIR           directory to be used as file system in fs.json 
 TERMYX_ENV_FILE         file with environment variables to be used in fs.json
-
+```
 
 > **OBS.** If some of the above envs was not set, a default `fs.json` will be used, which tries to mimic UNIX's structure
 
