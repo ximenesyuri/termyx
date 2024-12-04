@@ -12,6 +12,7 @@ import { cp } from '../cmd/cp.js';
 import { rm } from '../cmd/rm.js';
 import { exit } from '../cmd/exit.js';
 import { env } from '../cmd/env.js';
+import { setTheme } from './theme.js';
 
 export const availableCommands = {
     'ls': ls,
@@ -25,7 +26,8 @@ export const availableCommands = {
     'cp': (args, terminalState, fileSystem) => cp(args, terminalState, fileSystem),
     'rm': (args, terminalState, fileSystem) => rm(args, terminalState, fileSystem),
     'exit': (args, terminalElement) => exit(args, terminalElement),
-    'env': (args, terminalState) => printEnv(args, terminalState)
+    'env': (args, terminalState) => env(args, terminalState),
+    'TERMYX_THEME': (args, terminalState) => setTheme(args, terminalState),
 };
 
 

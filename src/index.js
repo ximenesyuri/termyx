@@ -1,10 +1,6 @@
 import { initTerminal } from './core/term.js';
 import { keysHandler } from './core/keys.js';
-import { defaultIntroText } from './core/intro.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initializeTerminal();
-});
 
 async function initializeTerminal() {
     const terminalElement = document.getElementById('terminal');
@@ -14,12 +10,11 @@ async function initializeTerminal() {
     }
 
     terminalElement.tabIndex = 0;
-    terminalElement.focus();
 
-    const filesystemPath = terminalElement.getAttribute('data-filesystem-path');
-    const startPath = terminalElement.getAttribute('data-start-path') || '/';
+    const filesystemPath = 'fs.json';
+    const startPath = terminalElement.getAttribute('data-start-path');
     const introTextFromElement = terminalElement.getAttribute('data-intro-text');
-    const promptText = terminalElement.getAttribute('data-prompt') || 'termyx$ ';
+    const promptText = terminalElement.getAttribute('data-prompt');
 
     if (!filesystemPath) {
         console.error('Filesystem path must be defined.');
@@ -34,14 +29,16 @@ async function initializeTerminal() {
         const fileConfig = await response.json();
         const { filesystem, envs = {} } = fileConfig;
 
-        const introText = introTextFromElement || defaultIntroText();
+        const introText = introTextFromElement || '';
 
         const terminalState = {
             currentPath: startPath,
             commandHistory: [],
             inputBuffer: '',
             historyIndex: 0,
+            cursorPosition: 0,
             envs,
+            variables: { ...envs },
             introText,
             promptText
         };
@@ -56,3 +53,7 @@ async function initializeTerminal() {
         console.error('Error initializing terminal:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeTerminal();
+});

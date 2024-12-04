@@ -4,14 +4,33 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const directoryToTraverse = process.env.TERMYX_FS_DIR;
-const pathToEnvFile = process.env.TERMYX_ENV_FILE;
-const prompt = process.env.TERMYX_PROMPT;
+const fsDir = process.env.TERMYX_FS_DIR;
+const envFile = process.env.TERMYX_ENV_FILE;
+const fsJsonPath = process.env.TERMYX_FS_JSON;
+const pwd = process.env.TERMYX_PWD || '';
+const prompt = process.env.TERMYX_PROMPT || 'term@yx';
+
 const outputPath = path.resolve('./dist');
-const introText = (process.env.TERMYX_INTRO || '').replace(/\\n/g, '<br>');
-const title = process.env.TERMYX_TITLE || 'termyx';
-const theme = process.env.TERMYX_THEME;
-const themesDirectory = path.resolve('./themes');
+const defaultIntroText = `
+
+   /$$                                                          
+  | $$                                                          
+ /$$$$$$    /$$$$$$   /$$$$$$  /$$$$$$/$$$$  /$$   /$$ /$$   /$$
+|_  $$_/   /$$__  $$ /$$__  $$| $$_  $$_  $$| $$  | $$|  $$ /$$/
+  | $$    | $$$$$$$$| $$  \__/| $$ \ $$ \ $$| $$  | $$ \  $$$$/ 
+  | $$ /$$| $$_____/| $$      | $$ | $$ | $$| $$  | $$  >$$  $$ 
+  |  $$$$/|  $$$$$$$| $$      | $$ | $$ | $$|  $$$$$$$ /$$/ \  $$
+   \___/   \_______/|__/      |__/ |__/ |__/ \____  $$|__/  \__/
+                                             /$$  | $$          
+                                            |  $$$$$$/          
+                                             \______/           
+
+`;
+
+const introText = (process.env.TERMYX_INTRO || defaultIntroText).replace(/\\n/g, '<br>');
+const title = process.env.TERMYX_TITLE || 'term@yx';
+const theme = process.env.TERMYX_THEME || 'basic';
+const themesDirectory = path.resolve('./src/themes');
 
 function createOrCleanDirSync(dirPath) {
     const resolvedPath = path.resolve(dirPath);
@@ -61,26 +80,42 @@ function readDirectorySync(dirPath) {
     return directoryContents;
 }
 
-function generateFileSystemJson() {
-    if (directoryToTraverse && pathToEnvFile) {
-        const envContent = dotenv.parse(fs.readFileSync(pathToEnvFile));
-        const filesystemStruct = readDirectorySync(directoryToTraverse);
+function mergeEnvs(envs) {
+    return {
+        'TERMYX_THEME': theme,
+        'TERMYX_INTRO': introText,
+        'TERMYX_PROMPT': prompt,
+        ...envs
+    };
+}
+
+function prepareFsJson(fsJsonPath) {
+    if (fs.existsSync(fsJsonPath)) {
+        fsJson = JSON.parse(fs.readFileSync(fsJsonPath, 'utf-8'));
+        fsJson.envs = mergeEnvs(fsJson.envs);
+        fs.writeFileSync(path.join(outputPath, 'fs.json'), JSON.stringify(fsJson, null, 2));
+    } else {
+        console.error(`Error: The provide file ${fsJson} does not exists.`)
+    }
+}
+
+function generateFsJson() {
+    if (fsJsonPath) {
+        console.log('Using fs.json file from TERMYX_FS_JSON env.')
+        prepareFsJson(fsJsonPath);
+    } else if (fsDir && envFile) {
+        const envContent = dotenv.parse(fs.readFileSync(envFile));
+        const filesystemStruct = readDirectorySync(fsDir);
 
         const resultJson = {
-            envs: envContent,
+            envs: mergeEnvs(envContent),
             filesystem: filesystemStruct
         };
-        fs.writeFileSync(path.join(outputPath, 'filesystem.json'), JSON.stringify(resultJson, null, 2));
-        console.log('filesystem.json has been created!');
+        fs.writeFileSync(path.join(outputPath, 'fs.json'), JSON.stringify(resultJson, null, 2));
+        console.log(`Using fs.json created from ${fsDir} and ${envFile}.`);
     } else {
-        const sourcePath = path.resolve('assets/filesystem.json');
-        if (fs.existsSync(sourcePath)) {
-            const destPath = path.join(outputPath, 'filesystem.json');
-            fs.copyFileSync(sourcePath, destPath);
-            console.log('Using existing filesystem.json from assets/');
-        } else {
-            console.error('Error: No directories specified and assets/filesystem.json not found.');
-        }
+        console.log('Using default fs.json file.')
+        prepareFsJson(path.resolve('assets/fs.json'));
     }
 }
 
@@ -99,16 +134,28 @@ function generateAssets() {
     <div id="terminal"
          data-intro-text="${introText}"
          data-prompt="${prompt}"
-         data-filesystem-path="filesystem.json"
-         data-start-path="/">
+         data-start-path="${pwd}">
     </div>
 </body>
 </html>`;
 
     const cssContent = `
+:root {
+       --background: #${cssBg};
+       --foreground: #${cssFg};
+       --dirs: #${cssDir};
+       --files: #${cssFile};
+       --intro: #${cssIntro};
+       --prompt: #${cssPrompt};
+       --input: #${cssInput};
+       --cursor: #${cssCursor};
+       --output: #${cssOutput};
+       --error: #${cssError};
+   }
+
 body {
-    background-color: #${cssBg};
-    color: #${cssFg};
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: "Courier New", Courier, monospace;
     margin: 0;
     padding: 0;
@@ -147,29 +194,29 @@ li {
 }
 
 .prompt  {
-    color: #${cssPrompt};
+    color: var(--prompt);
     display: inline;
     line-height: 25px;
     visibility: visible;
 }
 
 .input-line {
-    color: #${cssInput};
+    color: var(--input);
     display: inline;
     line-height: 25px;
     visibility: visible;
 }
 
 .intro-text {
-    color: #${cssIntro};
+    color: var(--intro);
 }
 
 .dir {
-    color: #${cssDir};
+    color: var(--dirs);
 }
 
 .file {
-    color: #${cssFile};
+    color: var(--files);
 }
 
 
@@ -178,29 +225,33 @@ a:hover {
 }
 
 .cursor {
-    height: 17.5px;
-    background-color: #${cssCursor};
+    height: 1.5em;
+    background-color: var(--cursor);
+    color: var(--background);
     animation: blink 1s steps(1) infinite;
     display: inline-block;
-    width: 8px;
+    width: 10px;
+    vertical-align: top;
 }
 
 @keyframes blink {
-    50% { background-color: transparent; }
+    50% { 
+        background-color: transparent; 
+        color: var(--foreground); 
+    }
 }
 
 .output {
-    color: #${cssOutput};
+    color: var(--output);
 }
 
 .error {
-    color: #${cssError};
+    color: var(--error);
 }
 `;
 
     fs.writeFileSync(path.join(outputPath, 'index.html'), htmlContent);
     fs.writeFileSync(path.join(outputPath, 'styles.css'), cssContent);
-    console.log('HTML and CSS files have been created.');
 }
 
 function loadTheme() {
@@ -215,22 +266,21 @@ function loadTheme() {
     } else {
         themePath = path.join(themesDirectory, `basic.json`);
     }
-    console.log(themePath)
     try {
         if (fs.existsSync(themePath)) {
             const themeContent = fs.readFileSync(themePath, 'utf-8');
             const theme = JSON.parse(themeContent);
             return {
-                cssBg: theme.background || cssBg,
-                cssFg: theme.foreground || cssFg,
-                cssDir: theme.directories || cssDir,
-                cssFile: theme.files || cssFile,
-                cssIntro: theme.intro || cssIntro,
-                cssPrompt: theme.prompt || cssPrompt,
-                cssInput: theme.input || cssInput,
-                cssCursor: theme.cursor || cssCursor,
-                cssOutput: theme.output || cssOutput,
-                cssError: theme.error || cssError,
+                cssBg: theme.background,
+                cssFg: theme.foreground,
+                cssDir: theme.directories,
+                cssFile: theme.files,
+                cssIntro: theme.intro,
+                cssPrompt: theme.prompt,
+                cssInput: theme.input,
+                cssCursor: theme.cursor,
+                cssOutput: theme.output,
+                cssError: theme.error,
             };
         } else {
             console.warn(`Warning: Theme file not found: ${themePath}`);
@@ -238,10 +288,10 @@ function loadTheme() {
     } catch (error) {
         console.error("Error loading theme:", error);
     }
-    return {};
 }
 
 createOrCleanDirSync(outputPath);
+generateFsJson();
 copyDirectorySync(path.resolve('./src'), outputPath)
 
 const {
@@ -257,5 +307,4 @@ const {
     cssError
 } = loadTheme();
 
-generateFileSystemJson();
 generateAssets();

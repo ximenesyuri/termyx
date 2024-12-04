@@ -48,3 +48,40 @@ export function normalizePath(path) {
     return '' + stack.join('/');
 }
 
+export function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;")
+               .replace(/</g, "&lt;")
+               .replace(/>/g, "&gt;")
+               .replace(/"/g, "&quot;")
+               .replace(/'/g, "&#039;");
+}
+
+export function generateRange(start, end) {
+    const range = [];
+    const startNum = parseInt(start, 10);
+    const endNum = parseInt(end, 10);
+    for (let i = startNum; i <= endNum; i++) {
+        range.push(i);
+    }
+    return range;
+}
+
+export function parseArrayExpression(expression, terminalState) {
+    const indexPattern = /^!([a-zA-Z_][a-zA-Z0-9_]*)\[@\]$/;
+    const arrayPattern = /^([a-zA-Z_][a-zA-Z0-9_]*)\[@\]$/;
+
+    if (expression.match(indexPattern)) {
+        const arrayName = expression.match(indexPattern)[1];
+        if (arrayName in terminalState.variables && Array.isArray(terminalState.variables[arrayName])) {
+            return Object.keys(terminalState.variables[arrayName]);  // Returns indices of the array
+        }
+    } else if (expression.match(arrayPattern)) {
+        const arrayName = expression.match(arrayPattern)[1];
+        if (arrayName in terminalState.variables && Array.isArray(terminalState.variables[arrayName])) {
+            return terminalState.variables[arrayName];  // Returns elements of the array
+        }
+    }
+
+    console.warn(`Expression does not refer to a valid array: ${expression}`);
+    return [];
+}
