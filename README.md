@@ -78,14 +78,15 @@ TERMYX_ENV_FILE         file with environment variables to be used in fs.json
 
 You can also set some structural parts of the `html` and one of the existing terminal themes.
 
+```
 env                     meaning                            default
 -----------------------------------------------------------------------------
 TERMYX_INTRO            text before the prompt             the termyx ascii
 TERMYX_TITLE            metatitle of the page              termyx
 TERMYX_THEME            terminal theme to be used          basic
+```
 
-
-> **OBS.** Alternatively, you can create your own custom theme, as below, as pass its path as the value of `TERMYX_THEME`.
+> **OBS.** Alternatively, you can create your own custom theme, as below, by passing its path as the value of `TERMYX_THEME`.
 
 ```json
 {
